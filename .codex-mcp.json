@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "gpss-patent": {
+      "command": "uv",
+      "args": ["run", "--quiet", "server.py"],
+      "cwd": ".",
+      "tool_timeout_sec": 120,
+      "env_vars": ["GPSS_USER_CODE"]
+    }
+  }
+}

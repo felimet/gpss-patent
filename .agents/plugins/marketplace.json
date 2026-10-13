@@ -1,0 +1,20 @@
+{
+  "name": "gpss-patent",
+  "interface": {
+    "displayName": "GPSS Patent Search"
+  },
+  "plugins": [
+    {
+      "name": "gpss-patent",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Education & Research"
+    }
+  ]
+}

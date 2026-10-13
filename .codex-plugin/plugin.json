@@ -1,0 +1,25 @@
+{
+  "name": "gpss-patent",
+  "version": "0.1.0",
+  "description": "Global patent search through the Taiwan IPO GPSS API (TW, US, JP, EP, KR, CN, WO and more): an MCP server plus a search-workflow skill.",
+  "author": {
+    "name": "Jia-Ming Zhou (Felimet)"
+  },
+  "license": "Apache-2.0",
+  "keywords": ["patent", "patent-search", "prior-art", "gpss", "tipo", "taiwan", "mcp"],
+  "skills": "./skills/",
+  "mcpServers": "./.codex-mcp.json",
+  "interface": {
+    "displayName": "GPSS Patent Search",
+    "shortDescription": "Search TW/US/JP/EP/KR/CN/WO patents through TIPO GPSS.",
+    "longDescription": "Read-only patent search over the Taiwan IPO Global Patent Search System API: Boolean field queries, CPC/IPC/FI classification, applicant and inventor filters, date ranges, and abstracts and claims. Requires a free GPSS API userCode.",
+    "developerName": "Jia-Ming Zhou (Felimet)",
+    "category": "Education & Research",
+    "capabilities": ["Interactive", "Read"],
+    "defaultPrompt": [
+      "Search Taiwan and US patents for lameness detection in dairy cows and list the most relevant ones.",
+      "Find patents whose CPC is H04W and applicant is Acme, published 2022 to 2024.",
+      "Fetch the abstract and claims of a patent from its publication number."
+    ]
+  }
+}
