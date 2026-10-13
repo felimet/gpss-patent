@@ -209,6 +209,17 @@ def test_invalid_code_trips_breaker(monkeypatch):
     assert len(calls) == 1  # second call must not reach the server (IP-block risk)
 
 
+def test_http_403_explains_possible_geo_restriction(monkeypatch):
+    import urllib.error
+
+    def deny(*a, **k):
+        raise urllib.error.HTTPError("u", 403, "Forbidden", {}, None)
+
+    monkeypatch.setattr(s.urllib.request, "urlopen", deny)
+    with pytest.raises(ToolError, match="HTTP 403.*Taiwan"):
+        s.gpss_search([C(field="TI", query="x")])
+
+
 def test_error_message_does_not_leak_code(monkeypatch):
     monkeypatch.setattr(s, "_fetch", lambda u, c: {"status": "fail", "message": "boom SECRETCODE"})
     with pytest.raises(ToolError) as e:

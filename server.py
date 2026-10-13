@@ -190,7 +190,9 @@ def _fetch(url: str, code: str) -> dict:
             raw = r.read(MAX_BODY_BYTES + 1)
     except urllib.error.HTTPError as e:
         log.warning("GPSS HTTP %s", e.code)
-        raise ToolError(f"GPSS HTTP {e.code}") from None
+        # tiponet.tipo.gov.tw answered 403 to GitHub-hosted (US) runners for its document downloads.
+        hint = " TIPO appears to restrict some non-Taiwan IP ranges; try from a Taiwan network or VPN." if e.code == 403 else ""
+        raise ToolError(f"GPSS HTTP {e.code}.{hint}") from None
     except (urllib.error.URLError, TimeoutError, OSError) as e:
         msg = _redact(str(e), code)
         log.warning("GPSS network error: %s", msg)
