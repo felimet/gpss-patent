@@ -86,6 +86,8 @@ GPSS_USER_CODE=<你的驗證碼> uv run /path/to/server.py     # stdio
 
 跑法：`python scripts/fetch_sources.py && uv run --with "mcp>=2.3,<3" --with pytest --with pypdf pytest -q`
 
+來源交叉比對測試需要 TIPO 原始檔，而 `tiponet.tipo.gov.tw` 對 GitHub 託管的 runner（美國）回 HTTP 403，因此 CI 跳過這些測試，只跑邏輯與封裝測試；完整測試由維護者在台灣網路執行。這也代表 API 本身在台灣以外可能無法連線，該點未測試（見下）。`gpss_search` 遇 HTTP 403 會說明此情況。
+
 | 項目 | 依據 | 方式 |
 |---|---|---|
 | 29 個檢索欄位 | `GPSS_OAS.json` | 測試：與 OAS 參數名集合相等 |
@@ -104,6 +106,7 @@ GPSS_USER_CODE=<你的驗證碼> uv run /path/to/server.py     # stdio
 - 伺服器端對 `+` / `-` 參數名前綴的解析，以及混合 AND / OR / NOT 的優先順序（假設由左至右）。
 - `expQty` 小於 30 的行為。server 一律送 `max(limit, 30)` 再於本地截取。
 - 「單筆案號」配額的確切定義、假日是否算下班時段。
+- API 端點（相對於文件下載）從台灣以外的 IP 是否可連線。
 
 ### 來源間矛盾
 

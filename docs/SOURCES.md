@@ -1,6 +1,6 @@
 # Source evidence
 
-Retrieved 2026-10-14 from tiponet.tipo.gov.tw (base `https://tiponet.tipo.gov.tw/gpss1/gpsskm/API/`). The files are TIPO originals and are not committed here because their redistribution terms are not stated. `python scripts/fetch_sources.py` downloads them into `_src/` and verifies the hashes below (exit 1 = TIPO changed a document). `test_server.py` cross-checks `server.py` against `_src/` and skips those tests when it is absent.
+Retrieved 2026-10-14 from tiponet.tipo.gov.tw (base `https://tiponet.tipo.gov.tw/gpss1/gpsskm/API/`). The files are TIPO originals and are not committed here because their redistribution terms are not stated. `python scripts/fetch_sources.py` downloads them into `_src/` and verifies the hashes below (exit 1 = TIPO changed a document). `test_server.py` cross-checks `server.py` against `_src/` and skips those tests when it is absent. From GitHub-hosted runners (US) these downloads returned HTTP 403 on 2026-10-14, while the same URLs returned 200 from a Taiwan IP regardless of User-Agent, so the check is run locally.
 
 | File | Version / content | Bytes | SHA-256 |
 |---|---|---|---|

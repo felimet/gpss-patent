@@ -86,6 +86,8 @@ Quotas (from the GPSS API page): 10,000 records per search; work hours (Mon–Fr
 
 Run: `python scripts/fetch_sources.py && uv run --with "mcp>=2.3,<3" --with pytest --with pypdf pytest -q`
 
+The source cross-check tests need TIPO's files, and `tiponet.tipo.gov.tw` answered HTTP 403 to GitHub-hosted runners (US), so CI skips them and runs only the logic and packaging tests. Maintainers run the full suite from a Taiwan network. This also means the API itself may be unreachable from outside Taiwan; that was not tested (see below). `gpss_search` explains an HTTP 403 accordingly.
+
 | Item | Source | How |
 |---|---|---|
 | 29 search fields | `GPSS_OAS.json` | test: equals the OAS parameter-name set |
@@ -104,6 +106,7 @@ Run: `python scripts/fetch_sources.py && uv run --with "mcp>=2.3,<3" --with pyte
 - Server-side handling of the `+`/`-` parameter-name prefixes, and precedence of mixed AND/OR/NOT (assumed left to right).
 - Behaviour of `expQty` below 30. The server always sends `max(limit, 30)` and slices locally.
 - Exact meaning of the "single case number" quota, and whether holidays count as off hours.
+- Whether the API endpoint (as opposed to the document downloads) is reachable from non-Taiwan IPs.
 
 ### Source inconsistencies
 
