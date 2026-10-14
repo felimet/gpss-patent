@@ -13,7 +13,7 @@ never logged and never returned.
 Run: uv run server.py   (stdio transport)
 """
 # Must equal the plugin manifests' version; test_packaging.py enforces it.
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 
 import json
 import logging
@@ -162,7 +162,9 @@ def _user_code() -> str:
         raise ToolError(
             f"Env {ENV_CODE} is not set. A GPSS API userCode is required: "
             "GPSS (tiponet.tipo.gov.tw/gpss1/gpsskmc/gpssbkm) > API > 使用說明 > API驗證碼線上申請 "
-            "(one Email = one code; expired -> 展期; forgotten -> 忘記 API 驗證碼). "
+            "(one Email = one code; review takes 1-3 working days, the code is mailed the next working day; "
+            "expired -> 展期; forgotten -> 忘記 API 驗證碼). Do not apply with a mainland China / Hong Kong / Macau "
+            "Email or connect from those regions: GPSS blocks them. "
             f"Claude Code: set the plugin option 'GPSS userCode' (/plugin, gpss-patent, configure). "
             f"Codex and other hosts: export {ENV_CODE} before starting the host.")
     return code
@@ -190,8 +192,10 @@ def _fetch(url: str, code: str) -> dict:
             raw = r.read(MAX_BODY_BYTES + 1)
     except urllib.error.HTTPError as e:
         log.warning("GPSS HTTP %s", e.code)
-        # tiponet.tipo.gov.tw answered 403 to GitHub-hosted (US) runners for its document downloads.
-        hint = " TIPO appears to restrict some non-Taiwan IP ranges; try from a Taiwan network or VPN." if e.code == 403 else ""
+        # GPSS policy blocks CN/HK/MO. GitHub-hosted (US) runners were also refused (403) on the
+        # document downloads, cause undocumented, so the hint names both.
+        hint = (" GPSS blocks mainland China, Hong Kong and Macau; other networks (e.g. GitHub-hosted US runners)"
+                " have also been refused. Try from a Taiwan network.") if e.code == 403 else ""
         raise ToolError(f"GPSS HTTP {e.code}.{hint}") from None
     except (urllib.error.URLError, TimeoutError, OSError) as e:
         msg = _redact(str(e), code)
@@ -335,7 +339,13 @@ def gpss_reference() -> dict[str, Any]:
             "NOT live-verified (needs valid userCode): success payload shape, '+'/'-' prefix handling, expQty below 30, precedence of mixed AND/OR/NOT (assumed left to right).",
             "Native-language vs English matching of TI/AB/CL on JP/KR/CN databases is undocumented; try both.",
             "qty-rec in the docs' examples equals the requested expQty, not the returned count; this server reports its own count.",
+            "Besides CN/HK/MO, GitHub-hosted US runners also got HTTP 403 on TIPO's document downloads (cause undocumented); API reachability from other non-Taiwan networks is not verified.",
         ],
+        "access": {
+            "userCode": "One per Email. Review takes 1-3 working days after the application date; the code is mailed the next working day after approval. The form shows an expiry of application date + 1 year (observed 2026-10-14 -> 2027-10-14); renew with 展期.",
+            "blocked_regions": ["CN (mainland China)", "HK (Hong Kong)", "MO (Macau)"],
+            "blocked_regions_note": "Per GPSS policy: do not apply with an Email from these regions and do not connect from their IPs.",
+        },
         "disclaimer": DISCLAIMER,
     }
 

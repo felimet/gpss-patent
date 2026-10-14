@@ -1,7 +1,7 @@
 {
   "name": "gpss-patent",
   "displayName": "GPSS Patent Search",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Global patent search through the Taiwan IPO GPSS API (TW, US, JP, EP, KR, CN, WO and more): an MCP server plus a search-workflow skill.",
   "author": {
     "name": "Jia-Ming Zhou (Felimet)",
@@ -15,7 +15,7 @@
     "gpss_user_code": {
       "type": "string",
       "title": "GPSS userCode",
-      "description": "API verification code (驗證碼) from TIPO. Apply at GPSS > API > 使用說明 > API驗證碼線上申請 (one Email = one code). Leave empty to set it later.",
+      "description": "API verification code (驗證碼) from TIPO. Apply at GPSS > API > 使用說明 > API驗證碼線上申請 (one Email = one code; review takes 1-3 working days; mainland China, Hong Kong and Macau Emails and IPs are blocked). Leave empty to set it later.",
       "sensitive": true
     }
   }
