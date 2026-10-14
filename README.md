@@ -34,7 +34,10 @@ GPSS (Global Patent Search System, 全球專利檢索系統) covers 23 databases
 
 ## Install
 
-You need a GPSS userCode: GPSS → API → 使用說明 → 「API驗證碼線上申請」 (one Email = one code; expired → 「API 驗證碼展期」).
+You need a GPSS userCode: GPSS → API → 使用說明 → 「API驗證碼線上申請」.
+
+- One Email = one code. Review takes 1–3 working days from the application date; the code is mailed the next working day after approval. The form shows an expiry of application date + 1 year; renew with 「API 驗證碼展期」, recover with 「忘記 API 驗證碼」.
+- GPSS policy blocks mainland China, Hong Kong and Macau: do not apply with an Email from those regions and do not connect from their IPs.
 
 ### Claude Code
 
@@ -86,7 +89,7 @@ Quotas (from the GPSS API page): 10,000 records per search; work hours (Mon–Fr
 
 Run: `python scripts/fetch_sources.py && uv run --with "mcp>=2.3,<3" --with pytest --with pypdf pytest -q`
 
-The source cross-check tests need TIPO's files, and `tiponet.tipo.gov.tw` answered HTTP 403 to GitHub-hosted runners (US), so CI skips them and runs only the logic and packaging tests. Maintainers run the full suite from a Taiwan network. This also means the API itself may be unreachable from outside Taiwan; that was not tested (see below). `gpss_search` explains an HTTP 403 accordingly.
+The source cross-check tests need TIPO's files, and `tiponet.tipo.gov.tw` answered HTTP 403 to GitHub-hosted runners (US), so CI skips them and runs only the logic and packaging tests. Maintainers run the full suite from a Taiwan network. The only documented restriction is mainland China, Hong Kong and Macau; why the US runners were refused is not documented, and whether the API endpoint (as opposed to the document downloads) refuses them too was not tested. `gpss_search` explains an HTTP 403 accordingly.
 
 | Item | Source | How |
 |---|---|---|
@@ -106,7 +109,7 @@ The source cross-check tests need TIPO's files, and `tiponet.tipo.gov.tw` answer
 - Server-side handling of the `+`/`-` parameter-name prefixes, and precedence of mixed AND/OR/NOT (assumed left to right).
 - Behaviour of `expQty` below 30. The server always sends `max(limit, 30)` and slices locally.
 - Exact meaning of the "single case number" quota, and whether holidays count as off hours.
-- Whether the API endpoint (as opposed to the document downloads) is reachable from non-Taiwan IPs.
+- Whether the API endpoint (as opposed to the document downloads) is reachable from non-Taiwan networks other than mainland China, Hong Kong and Macau, which are documented as blocked.
 
 ### Source inconsistencies
 

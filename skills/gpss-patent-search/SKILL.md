@@ -10,8 +10,11 @@ description: 以經濟部智慧財產局 GPSS 全球專利檢索系統 API 檢�
 ## 前置：userCode
 
 - 缺少 `GPSS_USER_CODE` 時工具會回報錯誤且不連網。此時告知使用者：到 GPSS（https://tiponet.tipo.gov.tw/gpss1/gpsskmc/gpssbkm）→ API → 使用說明 → 「API驗證碼線上申請」；一個 Email 一組；過期用「API 驗證碼展期」，忘記用「忘記 API 驗證碼」。
+- 申請後 1~3 個工作天審核，通過後於次個工作日寄到信箱；申請表顯示使用期限為申請日起一年。
+- GPSS 依政策禁止中港澳地區連線：不可用中港澳地區信箱申請，也不可從中港澳地區 IP 連線。使用者在這些地區時，直接告知無法使用，不要重試。
 - 取得後，Claude Code 在 `/plugin` 的 gpss-patent 設定中填入「GPSS userCode」；Codex 與其他 host 則在啟動前設定環境變數 `GPSS_USER_CODE`。請使用者自行設定，不要貼進對話。
 - 收到 `userCode not exist` / `expired` / `IP blocked` 後停止呼叫並回報；無效驗證碼重試過多會被封 IP。
+- 收到 `HTTP 403` 時停止並回報網路來源問題（中港澳被政策封鎖；GitHub 美國 runner 也曾被拒，原因未公開）。
 
 ## 流程
 

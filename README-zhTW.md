@@ -34,7 +34,10 @@ GPSS（全球專利檢索系統）涵蓋 TW / US / JP / EP / KR / CN / WIPO / �
 
 ## 安裝
 
-需要 GPSS userCode：GPSS → API → 使用說明 → 「API驗證碼線上申請」（一個 Email 一組；過期請按「API 驗證碼展期」）。
+需要 GPSS userCode：GPSS → API → 使用說明 → 「API驗證碼線上申請」。
+
+- 一個 Email 只能申請一組。申請日起 1~3 個工作天內審核完成，通過後於次個工作日寄到信箱。申請表顯示使用期限為申請日起一年；過期請按「API 驗證碼展期」，忘記請按「忘記 API 驗證碼」。
+- GPSS 依政策禁止中港澳地區連線：請勿使用中港澳地區信箱申請，亦勿從中港澳地區 IP 連線。
 
 ### Claude Code
 
@@ -86,7 +89,7 @@ GPSS_USER_CODE=<你的驗證碼> uv run /path/to/server.py     # stdio
 
 跑法：`python scripts/fetch_sources.py && uv run --with "mcp>=2.3,<3" --with pytest --with pypdf pytest -q`
 
-來源交叉比對測試需要 TIPO 原始檔，而 `tiponet.tipo.gov.tw` 對 GitHub 託管的 runner（美國）回 HTTP 403，因此 CI 跳過這些測試，只跑邏輯與封裝測試；完整測試由維護者在台灣網路執行。這也代表 API 本身在台灣以外可能無法連線，該點未測試（見下）。`gpss_search` 遇 HTTP 403 會說明此情況。
+來源交叉比對測試需要 TIPO 原始檔，而 `tiponet.tipo.gov.tw` 對 GitHub 託管的 runner（美國）回 HTTP 403，因此 CI 跳過這些測試，只跑邏輯與封裝測試；完整測試由維護者在台灣網路執行。文件載明的限制只有中港澳；美國 runner 被拒的原因沒有文件說明，API 端點本身（相對於文件下載）是否也拒絕未測試。`gpss_search` 遇 HTTP 403 會說明此情況。
 
 | 項目 | 依據 | 方式 |
 |---|---|---|
@@ -106,7 +109,7 @@ GPSS_USER_CODE=<你的驗證碼> uv run /path/to/server.py     # stdio
 - 伺服器端對 `+` / `-` 參數名前綴的解析，以及混合 AND / OR / NOT 的優先順序（假設由左至右）。
 - `expQty` 小於 30 的行為。server 一律送 `max(limit, 30)` 再於本地截取。
 - 「單筆案號」配額的確切定義、假日是否算下班時段。
-- API 端點（相對於文件下載）從台灣以外的 IP 是否可連線。
+- API 端點（相對於文件下載）從台灣以外、且不在中港澳的網路是否可連線；中港澳已載明禁止。
 
 ### 來源間矛盾
 
